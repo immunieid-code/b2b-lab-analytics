@@ -1,0 +1,83 @@
+# B2B Laboratory Equipment — Customer Analytics
+
+Customer segmentation and sales-targeting analysis for a B2B laboratory equipment distributor. The company had five years of sales history across 300+ accounts and no systematic way to tell which ones to defend, which to grow, and which had already churned quietly.
+
+**Tools:** Python (Pandas, Scikit-Learn, Prophet), SQL, Looker Studio
+
+---
+
+## The problem
+
+The sales team treated all 300+ accounts the same: periodic calls, mass email, equal attention regardless of purchase history. Revenue from a Rp 2.4B account and a one-time Rp 150K purchase looked identical in the spreadsheet. There was no cross-sell intelligence — which customers buy instruments but have never ordered spares; which ones are overdue for a consumable reorder.
+
+## What I built
+
+An 8-stage Python pipeline that goes from raw purchase orders to a ranked, actionable list of which customer to call about which product — and when. `scripts/pipeline.py` is a reconstruction of the core logic for this write-up (the original client dataset isn't mine to publish) — it matches the real column names and stage structure from the project.
+
+```
+Stage 1  — Feature extraction
+          Customer-level: total revenue, order count, product mix (instruments /
+          spares / consumables), recency
+          Product-level: buyer count, revenue, average order value
+
+Stage 5  — RFM + 24-month CLTV
+          Recency, Frequency, Monetary scores per account
+          CLTV model: purchase rate × average order value × estimated lifetime
+          Negative CLTV = account has almost certainly churned for good
+
+Stage 6  — K-Means segmentation
+          4 clusters labeled: Champions / Loyal / Growth / Risk / Churn
+          Separate pass on products to find high-revenue, low-reach items
+
+Stage 7  — Opportunity matrix
+          Cross-join: each customer × each product they have never bought
+          Score = CLTV × base purchase probability × segment weight × recency decay
+          Output: ranked list of (customer, product, opportunity_score)
+          Retention targets: accounts with high CLTV but rising recency
+
+Stage 8  — Retention risk scores
+          Weighted score combining recency rank, CLTV, and segment label
+          Used to prioritise which at-risk accounts need a call this week
+```
+
+## Key results
+
+- **300+ accounts** segmented into actionable tiers; ~40% flagged as Churn based on last-order recency and negative CLTV
+- **Top cross-sell list** surfaced high-opportunity customer × product pairs the sales team had never systematically identified (e.g., loyal instrument buyers who had never ordered the matching spares)
+- **Revenue forecast** for 2026–2027 via Facebook Prophet on monthly revenue series
+- **Looker Studio dashboard** delivered to the client as a live report — RFM breakdown, segment distribution, top accounts by CLTV, retention risk leaderboard
+
+## What the output looks like
+
+Each row in the final opportunity list:
+
+```
+customer            product                 CLTV_24m    opp_score
+aas laboratory      apex method 5           40,997,255  5,405,609,037
+pt. unilab perdana  apex method 5           36,165,219  5,366,935,867
+pt. intertek        apex method 5           21,430,428  5,205,564,589
+```
+
+The sales team gets a short list sorted by opportunity score, not a dump of all 300 accounts.
+
+## Files in this repo
+
+```
+scripts/
+  pipeline.py                    # reconstructed core logic: features, RFM/CLTV,
+                                  # K-Means segmentation, opportunity scoring
+outputs/
+  sample_segmentation.csv        # anonymized sample rows, real column structure —
+                                  # customer names replaced, actual client data withheld
+```
+
+The real client dataset and full output (300+ named accounts) are not included — confidentiality. The sample above uses the same columns and realistic value ranges to show what the pipeline produces.
+
+## How to run
+
+```bash
+pip install pandas scikit-learn
+# Place your own order-history export as data/orders.csv with columns:
+# customer, sku, product_name, product_type, qty, revenue, order_date
+python scripts/pipeline.py
+```

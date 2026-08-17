@@ -1,0 +1,7 @@
+customer,total_revenue,total_qty,avg_order_value,instrument_count,sparepart_count,consumable_count,recency_days,CLTV_24m,segment
+Customer A (env. testing lab),2468756408,542,34288283,58,11,3,5,40997255,Champions
+Customer B (govt. lab),184591300,10,23073912,5,3,0,70,3327507,Growth
+Customer C (private QA lab),140028000,84,10002000,4,9,1,4,1622113,Growth
+Customer D (research institute),191374100,4,47843525,4,0,0,347,2157193,Growth
+Customer E (one-time buyer),35000,4,35000,1,0,0,2031,-72,Churn
+Customer F (mfg. plant),508093020,7,254046510,2,0,0,490,611315,Risk
