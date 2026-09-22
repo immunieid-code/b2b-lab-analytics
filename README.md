@@ -1,6 +1,6 @@
 # B2B Laboratory Equipment — Customer Analytics
 
-Customer segmentation and sales-targeting analysis for a B2B laboratory equipment distributor. The company had five years of sales history across 300+ accounts and no systematic way to tell which ones to defend, which to grow, and which had already churned quietly.
+Customer segmentation and sales-targeting analysis for **PT Gagas Envirotek**. The company had five years of sales history across 300+ accounts and no systematic way to tell which ones to defend, which to grow, and which had already churned quietly.
 
 **Tools:** Python (Pandas, Scikit-Learn, Prophet), SQL, Looker Studio
 
@@ -12,7 +12,7 @@ The sales team treated all 300+ accounts the same: periodic calls, mass email, e
 
 ## What I built
 
-An 8-stage Python pipeline that goes from raw purchase orders to a ranked, actionable list of which customer to call about which product — and when. `scripts/pipeline.py` is a reconstruction of the core logic for this write-up (the original client dataset isn't mine to publish) — it matches the real column names and stage structure from the project.
+The project used an 8-stage analysis from raw purchase orders to ranked customer-product opportunities. `scripts/pipeline.py` reconstructs selected core stages for this write-up; the cleaned `notebooks/segmentation.ipynb` preserves project analysis code without its executed outputs. The original client dataset is not included.
 
 ```
 Stage 1  — Feature extraction
@@ -23,10 +23,10 @@ Stage 1  — Feature extraction
 Stage 5  — RFM + 24-month CLTV
           Recency, Frequency, Monetary scores per account
           CLTV model: purchase rate × average order value × estimated lifetime
-          Negative CLTV = account has almost certainly churned for good
+          Low CLTV helps identify accounts with weaker expected value
 
 Stage 6  — K-Means segmentation
-          4 clusters labeled: Champions / Loyal / Growth / Risk / Churn
+          4 clusters labeled: Champions / Loyal / Growth / Churn
           Separate pass on products to find high-revenue, low-reach items
 
 Stage 7  — Opportunity matrix
@@ -53,12 +53,12 @@ Each row in the final opportunity list:
 
 ```
 customer            product                 CLTV_24m    opp_score
-aas laboratory      apex method 5           40,997,255  5,405,609,037
-pt. unilab perdana  apex method 5           36,165,219  5,366,935,867
-pt. intertek        apex method 5           21,430,428  5,205,564,589
+Customer A          Example instrument A    40,000,000  5,400,000,000
+Customer B          Example instrument A    30,000,000  4,100,000,000
+Customer C          Example consumable B    20,000,000  2,800,000,000
 ```
 
-The sales team gets a short list sorted by opportunity score, not a dump of all 300 accounts.
+The sales team gets a short list sorted by opportunity score, not a dump of all 300 accounts. The three rows above are illustrative placeholders, not client output.
 
 ## Files in this repo
 
@@ -66,12 +66,13 @@ The sales team gets a short list sorted by opportunity score, not a dump of all 
 scripts/
   pipeline.py                    # reconstructed core logic: features, RFM/CLTV,
                                   # K-Means segmentation, opportunity scoring
+notebooks/
+  segmentation.ipynb             # cleaned project notebook; outputs removed
 outputs/
-  sample_segmentation.csv        # anonymized sample rows, real column structure —
-                                  # customer names replaced, actual client data withheld
+  sample_segmentation.csv        # fully synthetic example rows and values
 ```
 
-The real client dataset and full output (300+ named accounts) are not included — confidentiality. The sample above uses the same columns and realistic value ranges to show what the pipeline produces.
+The real client dataset and full output (300+ named accounts) are not included. The CSV example uses fabricated values with the same column structure. The notebook preserves original analysis code but has no executed outputs and requires the private input data and path changes before it can run.
 
 ## How to run
 
