@@ -6,6 +6,10 @@ Customer segmentation and sales-targeting analysis for **PT Gagas Envirotek**. T
 
 ---
 
+## Project Overview
+
+PT Gagas Envirotek supplied 2020–2025 laboratory-equipment purchase orders for a 2026 customer-analysis engagement. The work turned 1,575 orders from 314 accounts into customer segments, account-product opportunities and a sales dashboard. The findings rank where to follow up; no post-delivery revenue uplift is measured in the supplied project files.
+
 ## The problem
 
 The sales team treated all 300+ accounts the same: periodic calls, mass email, equal attention regardless of purchase history. Revenue from a Rp 2.4B account and a one-time Rp 150K purchase looked identical in the spreadsheet. There was no cross-sell intelligence — which customers buy instruments but have never ordered spares; which ones are overdue for a consumable reorder.
